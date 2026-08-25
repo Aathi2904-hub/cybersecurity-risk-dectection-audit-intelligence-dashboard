@@ -1,0 +1,11 @@
+Risk_ID,Event_Type,Risk_Level,Risk_Score,Status,Identified_Date
+R001,Phishing,High,90,Open,01-08-2006
+R002,Malware,High,85,Open,02-08-2006
+R003,Unauthorized Access,Medium,65,Pending,03-08-2006
+R004,Data Breach,High,95,Open,04-08-2006
+R005,Suspicious Login,Low,30,Closed,05-08-2006
+R006,Phishing,Medium,60,Pending,06-08-2006
+R007,Malware,High,88,Open,07-08-2006
+R008,Firewall Alert,Low,25,Closed,08-08-2006
+R009,Unauthorized Access,Medium,70,Pending,09-08-2006
+R010,Data Breach,High,92,Open,10-08-2006

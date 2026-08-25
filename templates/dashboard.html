@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cybersecurity Risk Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header class="top-header">
+
+    <div>
+        <h2>🔐 Cybersecurity Risk Detection</h2>
+        <span>Risk & Audit Intelligence System</span>
+    </div>
+
+    <a href="{{ url_for('logout') }}"
+       class="logout-button">
+        Logout
+    </a>
+
+</header>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<div class="dashboard">
+
+    <h1>Security Dashboard</h1>
+
+    <p>Monitor and analyze cybersecurity risks</p>
+
+
+    <!-- ================= SUMMARY CARDS ================= -->
+
+    <div class="dashboard-cards">
+
+        <div class="card">
+            <h2>Total Risks</h2>
+            <h3>{{ total_risks }}</h3>
+        </div>
+
+        <div class="card high-card">
+            <h2>High Risk</h2>
+            <h3>{{ high_risk }}</h3>
+        </div>
+
+        <div class="card medium-card">
+            <h2>Medium Risk</h2>
+            <h3>{{ medium_risk }}</h3>
+        </div>
+
+        <div class="card low-card">
+            <h2>Low Risk</h2>
+            <h3>{{ low_risk }}</h3>
+        </div>
+
+    </div>
+
+
+    <!-- ================= RISK OVERVIEW ================= -->
+
+    <div class="chart-section">
+
+        <h2>📊 Risk Overview</h2>
+
+        <div class="bar">
+
+            <div class="bar-label">
+                High Risk
+            </div>
+
+            <div class="bar-container">
+
+                <div class="bar-high"
+                     style="width: {{ high_risk * 10 }}%;">
+                    {{ high_risk }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="bar">
+
+            <div class="bar-label">
+                Medium Risk
+            </div>
+
+            <div class="bar-container">
+
+                <div class="bar-medium"
+                     style="width: {{ medium_risk * 10 }}%;">
+                    {{ medium_risk }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="bar">
+
+            <div class="bar-label">
+                Low Risk
+            </div>
+
+            <div class="bar-container">
+
+                <div class="bar-low"
+                     style="width: {{ low_risk * 10 }}%;">
+                    {{ low_risk }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= EVENT TYPE ANALYSIS ================= -->
+
+    <div class="chart-section">
+
+        <h2>📈 Event Type Analysis</h2>
+
+        {% for event, count in event_counts.items() %}
+
+        <div class="bar">
+
+            <div class="bar-label">
+                {{ event }}
+            </div>
+
+            <div class="bar-container">
+
+                <div class="event-bar"
+                     style="width: {{ count * 10 }}%;">
+                    {{ count }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ================= RISK SCORE ANALYSIS ================= -->
+
+    <div class="chart-section">
+
+        <h2>📊 Risk Score Analysis</h2>
+
+        {% for item in risk_scores %}
+
+        <div class="bar">
+
+            <div class="bar-label">
+                {{ item["id"] }}
+                — Score: {{ item["score"] }}
+            </div>
+
+            <div class="bar-container">
+
+                <div class="score-bar"
+                     style="width: {{ item['score'] }}%;">
+                    {{ item["score"] }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ================= DATE-WISE ANALYSIS ================= -->
+
+    <div class="chart-section">
+
+        <h2>📅 Date-wise Risk Analysis</h2>
+
+        {% for date, count in date_counts.items() %}
+
+        <div class="bar">
+
+            <div class="bar-label">
+                {{ date }}
+            </div>
+
+            <div class="bar-container">
+
+                <div class="date-bar"
+                     style="width: {{ count * 10 }}%;">
+                    {{ count }} Risk
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <div class="filter-section">
+
+        <h2>🔎 Search Risks</h2>
+
+        <form action="{{ url_for('dashboard') }}"
+              method="GET"
+              class="search-form">
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search Risk ID or Event Type..."
+            >
+
+            <button type="submit">
+                🔍 Search
+            </button>
+
+            {% if search %}
+
+            <a href="{{ url_for('dashboard') }}"
+               class="clear-button">
+                Clear
+            </a>
+
+            {% endif %}
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= RISK DETAILS TABLE ================= -->
+
+    <div class="table-section">
+
+        <h2>🔎 Risk Details</h2>
+
+        {% if data %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>Risk ID</th>
+                    <th>Event Type</th>
+                    <th>Risk Level</th>
+                    <th>Risk Score</th>
+                    <th>Status</th>
+                    <th>Identified Date</th>
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for row in data %}
+
+                <tr>
+
+                    <td>
+                        {{ row.get("Risk_ID", "") }}
+                    </td>
+
+                    <td>
+                        {{ row.get("Event_Type", "") }}
+                    </td>
+
+                    <td>
+
+                        <span class="risk-badge
+                        {{ row.get('Risk_Level', '')|lower }}">
+
+                            {{ row.get("Risk_Level", "") }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+                        {{ row.get("Risk_Score", "") }}
+                    </td>
+
+                    <td>
+                        {{ row.get("Status", "") }}
+                    </td>
+
+                    <td>
+                        {{ row.get("Identified_Date", "") }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="no-results">
+            ❌ No matching risks found.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <div class="dashboard-footer">
+
+        <p>
+            🔐 Cybersecurity Risk Detection |
+            Risk & Audit Intelligence System
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
